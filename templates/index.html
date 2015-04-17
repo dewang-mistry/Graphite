@@ -11,14 +11,14 @@
 				</div>
 				<ul class="list-group">
 					{% for notebook in notebooks %}
-						<a href="{{ notebook.url }}" class="list-group-item">
-							<h4 class="list-group-item-heading"><span class="text-primary">{{notebook.name}}</span></h4>
+						<a href="{{ notebook.slug }}" class="list-group-item">
+							<h4 class="list-group-item-heading"><span class="text-primary">{{notebook.title}}</span></h4>
 			    			<p class="list-group-item-text">{{notebook.desc}}</p>
 		    			</a>
 					{% endfor %}
 				</ul>
 				<hr>
-				<a class="btn btn-primary" href="new" role="button">Add New</a>
+				<a class="btn btn-primary" href="/new?m=edit" role="button">Add New</a>
 			</div>
 		</div>
 	</div>

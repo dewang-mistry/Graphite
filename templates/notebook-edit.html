@@ -1,6 +1,6 @@
 {% extends "bootstrap/base.html" %}
 
-{% block title %}{{title}}{% endblock %}
+{% block title %}{{notebook.title}}{% endblock %}
 
 {% block content %}
 	<div class="container">
@@ -8,14 +8,17 @@
 			<div class="col-md-10 col-md-offset-1">
 				<ol class="breadcrumb">
 		  			<li><a href="/">Home</a></li>
-		  			<li class="active">{{title}}</li>
+		  			<li class="active">{{notebook.title}}</li>
 				</ol>
 				<form action="" method="POST">
 					<div class="form-group">
-    					<input name="title" type="text" class="form-control" id="notebookTitle" placeholder="Enter title" value="{{title}}">
+    					<input name="title" type="text" class="form-control" id="notebookTitle" placeholder="Enter title" value="{{notebook.title}}">
   					</div>
   					<div class="form-group">
-						<textarea name="content" class="form-control" placeholder="Notebook content" rows="10">{{content}}</textarea>
+    					<input name="desc" type="text" class="form-control" id="notebookDesc" placeholder="Enter description" value="{{notebook.desc}}">
+  					</div>
+  					<div class="form-group">
+						<textarea name="content" class="form-control" placeholder="Notebook content" rows="10">{{notebook.content}}</textarea>
 					</div>
 					<div class="form-group">
   						<button type="submit" class="btn btn-primary pull-right">Save</button>
