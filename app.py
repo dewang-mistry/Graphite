@@ -36,6 +36,7 @@ def index(notebook):
 				notebook_data['slug'] = slugify(request.form['title'])
 				notebook_data['desc'] = request.form['desc']
 				notebook_data['content'] = request.form['content'].split('\r\n')
+				notebook = notebook_data['slug']
 
 				db.insert(notebook_data)
 
