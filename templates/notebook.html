@@ -1,0 +1,26 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+	<div class="container">
+		<div class="row">
+			<div class="col-md-10 col-md-offset-1">
+				<ol class="breadcrumb">
+		  			<li><a href="/">Home</a></li>
+		  			<li class="active">{{title}}</li>
+				</ol>
+				<div class="page-header">
+					<h1>{{title}}</h1>
+				</div>
+				<div class="page-content">
+					<p>
+						{{content}}
+					</p>
+				</div>
+				<hr>
+				<a class="btn btn-default pull-right" href="?m=edit" role="button"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>	
+			</div>
+		</div>
+	</div>
+ {% endblock %}
