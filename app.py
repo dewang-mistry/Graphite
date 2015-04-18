@@ -1,15 +1,16 @@
 from flask import Flask, render_template, request, redirect
 from flask.ext.script import Manager
 from flask_bootstrap import Bootstrap
+
 from tinydb import TinyDB, where
 from slugify import slugify
-from flaskext.markdown import Markdown
+import markdown2 as md
 
 app = Flask(__name__)
 manager = Manager(app)
 bootstrap = Bootstrap(app)
 db = TinyDB('notebooks.json')
-Markdown(app)
+
 
 @app.route('/', defaults={'notebook': None})
 @app.route('/<notebook>', methods=['GET', 'POST'])
@@ -57,7 +58,9 @@ def index(notebook):
 
 			if mode == None:
 				if selected_notebook:
-					notebook_data['content'] = '\n'.join(selected_notebook[0].get('content'))
+					notebook_html = md.markdown('\n'.join(selected_notebook[0].get('content')), extras=["code-friendly", "fenced-code-blocks", "tables"])
+					notebook_data['content'] = notebook_html
+					#notebook_data['content'] = '\n'.join(selected_notebook[0].get('content'))
 
 				return render_template('notebook.html', notebook=notebook_data)
 			else:

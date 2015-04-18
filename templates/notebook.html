@@ -4,6 +4,8 @@
 {{super()}}
 <link rel="stylesheet"
       href="{{url_for('.static', filename='css/app.css')}}">
+<link rel="stylesheet"
+      href="{{url_for('.static', filename='css/default.css')}}">
 {% endblock %}
 
 {% block scripts %}
@@ -39,7 +41,7 @@
 			<div class="col-md-9">
 				<div id="notebook-content" class="page-content">
 					<p>
-						{{notebook.content|safe|markdown}}
+						{{notebook.content|safe}}
 					</p>
 				</div>
 				<hr>
