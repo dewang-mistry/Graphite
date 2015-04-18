@@ -18,3 +18,6 @@ pip install markdown2
 pip install Pygments
 
 ```
+
+- https://github.com/richleland/pygments-css
+- https://github.com/codemirror/codemirror

@@ -19,3 +19,8 @@
 #toc .toc-active {
 
 }
+
+.CodeMirror {
+  border: 1px solid #eee;
+  height: auto;
+}
