@@ -1,27 +1,52 @@
 {% extends "bootstrap/base.html" %}
 
+{% block styles %}
+{{super()}}
+<link rel="stylesheet"
+      href="{{url_for('.static', filename='css/app.css')}}">
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+<script src="{{url_for('.static', filename='js/jquery-ui/jquery-ui.min.js')}}"></script>
+<script src="{{url_for('.static', filename='js/toc.min.js')}}"></script>
+<script src="{{url_for('.static', filename='js/app.js')}}"></script>
+
+{% endblock %}
+
 {% block title %}{{notebook.title}}{% endblock %}
 
 {% block content %}
 	<div class="container">
 		<div class="row">
-			<div class="col-md-10 col-md-offset-1">
+			<div class="col-md-12">
 				<ol class="breadcrumb">
-		  			<li><a href="/">Home</a></li>
-		  			<li class="active">{{notebook.title}}</li>
+					<li><a href="/">Home</a></li>
+					<li class="active">{{notebook.title}}</li>
 				</ol>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-9">
 				<div class="page-header">
 					<h1>{{notebook.title}}
 					<small>{{notebook.desc}}</small>
 					</h1>
 				</div>
-				<div class="page-content">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-9">
+				<div id="notebook-content" class="page-content">
 					<p>
 						{{notebook.content|safe|markdown}}
 					</p>
 				</div>
 				<hr>
 				<a class="btn btn-default pull-right" href="?m=edit" role="button"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>	
+			</div>
+			<div class="col-md-3">
+				<div id="toc"></div>
 			</div>
 		</div>
 	</div>
