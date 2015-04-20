@@ -4,6 +4,6 @@ $(function() {
 		'container': '#notebook-content'
 	});
 
-	$("#toc").sticky({topSpacing:10});
+	$("#side-bar").sticky({topSpacing:10});
 
 });
