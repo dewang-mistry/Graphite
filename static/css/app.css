@@ -20,6 +20,10 @@
 
 }
 
+#toc .toc-active {
+    border-left: 2px solid #18bc9c;
+}
+
 .CodeMirror {
   border: 1px solid #eee;
   height: auto;

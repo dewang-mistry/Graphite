@@ -21,3 +21,4 @@ pip install Pygments
 
 - https://github.com/richleland/pygments-css
 - https://github.com/codemirror/codemirror
+- https://github.com/garand/sticky

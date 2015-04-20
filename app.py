@@ -58,7 +58,7 @@ def index(notebook):
 
 			if mode == None:
 				if selected_notebook:
-					notebook_html = md.markdown('\n'.join(selected_notebook[0].get('content')), extras=["code-friendly", "fenced-code-blocks", "tables", "metadata"])
+					notebook_html = md.markdown('\n'.join(selected_notebook[0].get('content')), extras=["code-friendly", "fenced-code-blocks", "tables", "metadata", "cuddled-lists"])
 					notebook_data['content'] = notebook_html
 					#notebook_data['content'] = '\n'.join(selected_notebook[0].get('content'))
 
