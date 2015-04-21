@@ -62,7 +62,7 @@ def index(notebook):
 					notebook_data['content'] = notebook_html
 					#notebook_data['content'] = '\n'.join(selected_notebook[0].get('content'))
 
-				return render_template('notebook.html', notebook=notebook_data)
+				return render_template('notebook.html', notebook=notebook_data, metadata=notebook_html.metadata)
 			else:
 				if selected_notebook:
 					notebook_data['content'] = '\r\n'.join(selected_notebook[0].get('content'))
