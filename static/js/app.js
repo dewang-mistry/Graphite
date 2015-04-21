@@ -6,4 +6,5 @@ $(function() {
 
 	$("#side-bar").sticky({topSpacing:10});
 
+	$(".flashcard").flip();
 });
