@@ -19,7 +19,7 @@
 <script src="{{url_for('.static', filename='js/app.js')}}"></script>
 {% endblock %}
 
-{% block title %}{{metadata.title}}{% endblock %}
+{% block title %}{{notebook.title}}{% endblock %}
 
 {% block content %}
 	<div class="container">
@@ -27,15 +27,15 @@
 			<div class="col-md-12">
 				<ol class="breadcrumb">
 					<li><a href="/">Home</a></li>
-					<li class="active">{{metadata.title}}</li>
+					<li class="active">{{notebook.title}}</li>
 				</ol>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-9">
 				<div class="page-header">
-					<h1>{{metadata.title}}
-					<small>{{metadata.desc}}</small>
+					<h1>{{notebook.title}}
+					<small>{{notebook.desc}}</small>
 					</h1>
 				</div>
 			</div>

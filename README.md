@@ -16,6 +16,7 @@ pip install tinydb
 pip install slugify
 pip install markdown2
 pip install Pygments
+pip install Unipath
 
 ```
 
