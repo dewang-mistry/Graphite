@@ -6,6 +6,7 @@ from tinydb import TinyDB, where
 from slugify import slugify
 import markdown2 as md
 from unipath import Path
+import re
 
 app = Flask(__name__)
 manager = Manager(app)
@@ -13,6 +14,7 @@ bootstrap = Bootstrap(app)
 #db = TinyDB('notebooks.json')
 db = TinyDB('meta-db.json')
 notebooks_dir = Path('notebooks')
+link_patterns=[(re.compile(r'((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+(:[0-9]+)?|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)'),r'\1')]
 
 
 @app.route('/', defaults={'notebook': None})
@@ -70,7 +72,7 @@ def index(notebook):
 			if mode == None:
 				if selected_notebook:
 					if notebook_path.exists():
-						notebook_html = md.markdown(notebook_path.read_file(), extras=["code-friendly", "fenced-code-blocks", "tables", "metadata", "cuddled-lists"])
+						notebook_html = md.markdown(notebook_path.read_file(), extras=["code-friendly", "fenced-code-blocks", "tables", "metadata", "cuddled-lists", "link-patterns"], link_patterns=link_patterns)
 						notebook_data['content'] = notebook_html
 					#notebook_data['content'] = '\n'.join(selected_notebook[0].get('content'))
 
