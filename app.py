@@ -68,11 +68,12 @@ def index(notebook):
 				notebook_data['title'] = ''
 				notebook_data['desc'] = ''
 				notebook_data['content'] = ''
+				mode = 'edit'
 
 			if mode == None:
 				if selected_notebook:
 					if notebook_path.exists():
-						notebook_html = md.markdown(notebook_path.read_file(), extras=["code-friendly", "fenced-code-blocks", "tables", "metadata", "cuddled-lists", "link-patterns"], link_patterns=link_patterns)
+						notebook_html = md.markdown(notebook_path.read_file(), extras=["code-friendly", "fenced-code-blocks", "tables", "metadata", "cuddled-lists"])
 						notebook_data['content'] = notebook_html
 					#notebook_data['content'] = '\n'.join(selected_notebook[0].get('content'))
 
