@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, Response
 from flask.ext.script import Manager
 from flask_bootstrap import Bootstrap
 
@@ -8,6 +8,8 @@ import markdown2 as md
 from unipath import Path
 import re
 from bs4 import BeautifulSoup
+import json
+from purl import URL
 
 app = Flask(__name__)
 manager = Manager(app)
@@ -111,6 +113,46 @@ def index(notebook):
 						notebook_data['content'] = notebook_html
 
 				return render_template('notebook-edit.html', notebook=notebook_data)
+
+@app.route('/api/graph')
+def graph():
+	#nodes = [{'id':'notebook1', 'label':'Notebook 1'}, {'id':'notebook2', 'label':'Notebook 2'}]
+	#edges = [{'from':'notebook1', 'to':'notebook2'}]
+	nodes_map = {}
+	nodes = []
+	edges = []
+	internal_link_color = '#31B0D5'
+	external_link_color = '#EC971F'
+	color = internal_link_color
+
+	notebooks_list = db.all();
+
+	if notebooks_list:
+		for notebook in notebooks_list:
+			# Create notebook nodes
+			nodes_map.setdefault(notebook.get('slug'), notebook.get('title'))
+			#nodes.append({'id':notebook.get('slug'), 'label':notebook.get('title')})
+
+			# Get all links to create edges
+			links = notebook.get('links')
+			if links:
+				for link in links:
+					print(link)
+					nodes_map.setdefault(link.get('url'), link.get('name'))
+					edges.append({'from':notebook.get('slug'), 'to':link.get('url'), 'style':'arrow'})
+					#nodes.append({'id':link.get('url'), 'label':link.get('name')})
+
+		for url, name in nodes_map.iteritems():
+			parsed_url = URL(url)
+
+			if len(parsed_url.host()) > 0:
+				nodes.append({'id':url, 'label':name, 'color':external_link_color})
+			else:
+				nodes.append({'id':url, 'label':name, 'color':internal_link_color})
+
+	graph = {'nodes':nodes, 'edges':edges}
+
+	return Response(json.dumps(graph), mimetype='text/json')
 
 
 if __name__ == '__main__':

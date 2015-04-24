@@ -10,8 +10,22 @@
       href="{{url_for('.static', filename='css/themes/flaty-bootstrap.min.css')}}">
 {% endblock %}
 
+{% block scripts %}
+{{super()}}
+<script src="{{url_for('.static', filename='js/visjs/vis.js')}}"></script>
+<script src="{{url_for('.static', filename='js/kgraph.js')}}"></script>
+{% endblock %}
+
 {% block content %}
 	<div class="container">
+		<div class="row">
+			<div class="col-md-10 col-md-offset-1">
+				<div class="page-header">
+					<h1>Knowledge Graph</h1>
+				</div>
+				<div id="graphvis"></div>
+			</div>
+		</div>
 		<div class="row">
 			<div class="col-md-10 col-md-offset-1">
 				<div class="page-header">
