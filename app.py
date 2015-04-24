@@ -7,6 +7,7 @@ from slugify import slugify
 import markdown2 as md
 from unipath import Path
 import re
+from bs4 import BeautifulSoup
 
 app = Flask(__name__)
 manager = Manager(app)
@@ -15,6 +16,11 @@ bootstrap = Bootstrap(app)
 db = TinyDB('meta-db.json')
 notebooks_dir = Path('notebooks')
 link_patterns=[(re.compile(r'((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+(:[0-9]+)?|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)'),r'\1')]
+
+def get_html_from_md(md_text):
+	return md.markdown(md_text, extras=["code-friendly", "fenced-code-blocks", "tables", "metadata", "cuddled-lists"])
+
+
 
 
 @app.route('/', defaults={'notebook': None})
@@ -43,6 +49,7 @@ def index(notebook):
 				notebook_data['title'] = request.form['title']
 				notebook_data['slug'] = slugify(request.form['title'])
 				notebook_data['desc'] = request.form['desc']
+				notebook_data['links'] = []
 				#notebook_data['content'] = request.form['content'].split('\r\n')
 				#Create markdown file under notebooks dir
 				new_md_file = Path(notebooks_dir, notebook_data['slug'] + '.md')
@@ -73,7 +80,13 @@ def index(notebook):
 			if mode == None:
 				if selected_notebook:
 					if notebook_path.exists():
-						notebook_html = md.markdown(notebook_path.read_file(), extras=["code-friendly", "fenced-code-blocks", "tables", "metadata", "cuddled-lists"])
+						#notebook_html = md.markdown(notebook_path.read_file(), extras=["code-friendly", "fenced-code-blocks", "tables", "metadata", "cuddled-lists"])
+						notebook_html = get_html_from_md(notebook_path.read_file())
+
+						# Parse html using BeautifulSoup and extract all the links
+						soup = BeautifulSoup(notebook_html, "lxml")
+						print(soup.find_all('a'))
+
 						notebook_data['content'] = notebook_html
 					#notebook_data['content'] = '\n'.join(selected_notebook[0].get('content'))
 
