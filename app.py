@@ -20,7 +20,17 @@ link_patterns=[(re.compile(r'((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A
 def get_html_from_md(md_text):
 	return md.markdown(md_text, extras=["code-friendly", "fenced-code-blocks", "tables", "metadata", "cuddled-lists"])
 
+def get_all_links(html):
+	links_array = []
 
+	# Parse html using BeautifulSoup and extract all the links
+	soup = BeautifulSoup(html, "lxml")
+
+	for link in soup.find_all('a'):
+		links_array.append({'name':link.get_text(), 'url':link.get('href')})
+
+	print(links_array)
+	return links_array
 
 
 @app.route('/', defaults={'notebook': None})
@@ -42,19 +52,24 @@ def index(notebook):
 				notebook_data['desc'] = selected_notebook[0].get('desc')
 
 				new_md_file = Path(notebooks_dir, notebook + '.md')
-				new_md_file.write_file('\n'.join(request.form['content'].split('\r\n')))
 
-				db.update({'desc':request.form['desc'], 'title':request.form['title']}, where('slug') == notebook)
+				cleaned_md = '\n'.join(request.form['content'].split('\r\n'))
+				notebook_data['links'] = get_all_links(get_html_from_md(cleaned_md))
+
+				new_md_file.write_file(cleaned_md)
+				db.update({'desc':request.form['desc'], 'title':request.form['title'], 'links':notebook_data['links']}, where('slug') == notebook)
 			else:
 				notebook_data['title'] = request.form['title']
 				notebook_data['slug'] = slugify(request.form['title'])
 				notebook_data['desc'] = request.form['desc']
-				notebook_data['links'] = []
+
 				#notebook_data['content'] = request.form['content'].split('\r\n')
 				#Create markdown file under notebooks dir
 				new_md_file = Path(notebooks_dir, notebook_data['slug'] + '.md')
-				new_md_file.write_file('\n'.join(request.form['content'].split('\r\n')))
+				cleaned_md = '\n'.join(request.form['content'].split('\r\n'))
+				notebook_data['links'] = get_all_links(get_html_from_md(cleaned_md))
 
+				new_md_file.write_file(cleaned_md)
 				db.insert(notebook_data)
 				notebook = notebook_data['slug']
 
@@ -83,9 +98,7 @@ def index(notebook):
 						#notebook_html = md.markdown(notebook_path.read_file(), extras=["code-friendly", "fenced-code-blocks", "tables", "metadata", "cuddled-lists"])
 						notebook_html = get_html_from_md(notebook_path.read_file())
 
-						# Parse html using BeautifulSoup and extract all the links
-						soup = BeautifulSoup(notebook_html, "lxml")
-						print(soup.find_all('a'))
+						
 
 						notebook_data['content'] = notebook_html
 					#notebook_data['content'] = '\n'.join(selected_notebook[0].get('content'))
