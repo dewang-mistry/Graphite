@@ -30,7 +30,7 @@ body {
 }
 
 .flashcard {
-  height: 200px;
+  height: 300px;
   width: 100%;
   cursor: pointer;
 }
@@ -44,14 +44,14 @@ body {
 }
 
 .flashcard .front {
-  background-color: silver;
+  background-color: #ECF0F1;
   font-size: 36px;
   text-align: center;
   vertical-align: middle;
-  line-height: 200px;
+  line-height: 300px;
 }
 
 .flashcard .back {
-  background-color: silver;
+  background-color: #ECF0F1;
   padding: 5px 5px 5px 5px;
 }
