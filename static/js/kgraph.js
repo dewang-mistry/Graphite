@@ -17,7 +17,8 @@ function getGraphJSON(data) {
 	    hover: true,
 	    hideEdgesOnDrag: true,
 	    stabilize: true,
-	    clustering: true,
+	    clustering: false,
+	    keyboard: true,
 	    nodes: {
 		    color: {
 		      background: 'white',
@@ -38,9 +39,44 @@ function getGraphJSON(data) {
 	network.on('select', function (properties) {
 		//alert('selected nodes: ' + properties.nodes);
 		if (properties.nodes.length > 0) {
+			
+			var animation_options = {
+				easingFunction:'easeInOutCubic'
+			};
+
+			var zoom_options = {
+				scale:1.2,
+				animation: animation_options,
+				locked: true
+			};
+
+			network.focusOnNode(properties.nodes, zoom_options);
+
+			console.log(network.getConnectedNodes(properties.nodes));
+		}
+	});
+
+	network.on('doubleClick', function (properties) {
+		console.log('Node Clicked!')
+		if (properties.nodes.length > 0) {
 			window.location.href = properties.nodes;
 		}
 	});
+
+	network.on('stabilized', function (properties) {
+		console.log('stabilized!');
+		//network.zoomExtent();
+	});
+
+	Mousetrap.bind('esc', function() { 
+		var animation_options = {
+			easingFunction:'easeInOutCubic'
+		};
+
+		network.zoomExtent(animation_options);
+	});
+
+	NProgress.done();
 }
 
 /*
@@ -60,5 +96,5 @@ edges.add([
     {from: '2', to: '5'},
 ]);
 */
-
+NProgress.start();
 $.getJSON("/api/graph", getGraphJSON);

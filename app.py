@@ -26,7 +26,8 @@ def get_all_links(html):
 	links_array = []
 
 	# Parse html using BeautifulSoup and extract all the links
-	soup = BeautifulSoup(html, "lxml")
+	#soup = BeautifulSoup(html, "lxml")
+	soup = BeautifulSoup(html)
 
 	for link in soup.find_all('a'):
 		links_array.append({'name':link.get_text(), 'url':link.get('href')})
@@ -121,8 +122,8 @@ def graph():
 	nodes_map = {}
 	nodes = []
 	edges = []
-	internal_link_color = '#31B0D5'
-	external_link_color = '#EC971F'
+	internal_link_color = '#0088d7'
+	external_link_color = '#e70081'
 	color = internal_link_color
 
 	notebooks_list = db.all();
