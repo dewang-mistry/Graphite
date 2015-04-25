@@ -156,6 +156,19 @@ def graph():
 	return Response(json.dumps(graph), mimetype='text/json')
 
 
+@app.route('/api/notebookList')
+def notebook_list():
+	names = []
+
+	notebooks_list = db.all();
+
+	if notebooks_list:
+		for notebook in notebooks_list:
+			names.append(notebook.get('title'))			
+
+
+	return Response(json.dumps(names), mimetype='text/json')
+
 if __name__ == '__main__':
     #app.run(debug=True)
     manager.run()

@@ -1,10 +1,27 @@
+var states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California',
+  'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii',
+  'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana',
+  'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
+  'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire',
+  'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
+  'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island',
+  'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
+  'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
+];
+
+var states = new Bloodhound({
+  datumTokenizer: Bloodhound.tokenizers.whitespace,
+  queryTokenizer: Bloodhound.tokenizers.whitespace,
+  // `states` is an array of state names defined in "The Basics"
+  //local: states
+  prefetch: '/api/notebookList'
+});
+
+
 function getGraphJSON(data) {
 	//console.log(data);
 	var nodes = data['nodes'];
 	var edges = data['edges']
-
-	console.log(nodes);
-	console.log(edges);
 
 	var data= {
 		nodes: nodes,
@@ -18,7 +35,7 @@ function getGraphJSON(data) {
 	    hideEdgesOnDrag: true,
 	    stabilize: true,
 	    clustering: false,
-	    keyboard: true,
+	    keyboard: false,
 	    nodes: {
 		    color: {
 		      background: 'white',
@@ -45,7 +62,7 @@ function getGraphJSON(data) {
 			};
 
 			var zoom_options = {
-				scale:1.2,
+				scale:1.3,
 				animation: animation_options,
 				locked: true
 			};
@@ -74,9 +91,12 @@ function getGraphJSON(data) {
 		};
 
 		network.zoomExtent(animation_options);
+		$("#search-box-input").focus();
 	});
 
 	NProgress.done();
+
+	$("#search-box-input").focus();
 }
 
 /*
@@ -98,3 +118,15 @@ edges.add([
 */
 NProgress.start();
 $.getJSON("/api/graph", getGraphJSON);
+
+$(function() {
+	$('#search-box .typeahead').typeahead({
+	  hint: true,
+	  highlight: true,
+	  minLength: 1
+	},
+	{
+	  name: 'states',
+	  source: states
+	});
+});

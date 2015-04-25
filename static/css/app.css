@@ -61,3 +61,12 @@ body {
   height: 450px;
   background-color: #fef7e1;
 }
+
+#search-box {
+  background-color: silver;
+  margin-top: 30px;
+}
+
+#search-box .typeahead {
+  width: 100%;
+}

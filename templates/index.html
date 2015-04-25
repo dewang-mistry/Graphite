@@ -17,12 +17,20 @@
 <script src="{{url_for('.static', filename='js/visjs/vis.js')}}"></script>
 <script src="{{url_for('.static', filename='js/mousetrap.min.js')}}"></script>
 <script src="{{url_for('.static', filename='js/nprogress.js')}}"></script>
+<script src="{{url_for('.static', filename='js/typeahead.bundle.min.js')}}"></script>
 <script src="{{url_for('.static', filename='js/kgraph.js')}}"></script>
 {% endblock %}
 
 {% block content %}
 <div id="graphvis"></div>
 	<div class="container">
+		<div class="row">
+			<div class="col-md-6 col-md-offset-3">
+				<div id="search-box">
+  					<input class="typeahead" id="search-box-input" type="text" placeholder="Search...">
+				</div>
+			</div>
+		</div>
 		<div class="row">
 			<div class="col-md-10 col-md-offset-1">
 				<div class="page-header">
