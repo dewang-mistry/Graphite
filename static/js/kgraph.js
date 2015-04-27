@@ -33,7 +33,7 @@ function getGraphJSON(data) {
 	    height: '100%',
 	    hover: true,
 	    hideEdgesOnDrag: true,
-	    stabilize: true,
+	    stabilize: false,
 	    clustering: false,
 	    keyboard: false,
 	    nodes: {
@@ -91,7 +91,6 @@ function getGraphJSON(data) {
 		};
 
 		network.zoomExtent(animation_options);
-		$("#search-box-input").focus();
 	});
 
 	NProgress.done();
@@ -121,7 +120,7 @@ $.getJSON("/api/graph", getGraphJSON);
 
 $(function() {
 	$('#search-box .typeahead').typeahead({
-	  hint: true,
+	  hint: false,
 	  highlight: true,
 	  minLength: 1
 	},

@@ -67,6 +67,13 @@ body {
   margin-top: 30px;
 }
 
-#search-box .typeahead {
+#search-box-input {
   width: 100%;
+  font-size: 20px;
+}
+
+.tt-menu {
+  background-color: red;
+  width: 300px;
+  margin-top: 3px;
 }
