@@ -1,27 +1,11 @@
-var states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California',
-  'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii',
-  'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana',
-  'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
-  'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire',
-  'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
-  'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island',
-  'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
-  'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
-];
-
-var states = new Bloodhound({
-  datumTokenizer: Bloodhound.tokenizers.whitespace,
-  queryTokenizer: Bloodhound.tokenizers.whitespace,
-  // `states` is an array of state names defined in "The Basics"
-  //local: states
-  prefetch: '/api/notebookList'
-});
-
+var nodes = [];
+var edges = [];
+var network;
 
 function getGraphJSON(data) {
 	//console.log(data);
-	var nodes = data['nodes'];
-	var edges = data['edges']
+	nodes = data['nodes'];
+	edges = data['edges'];
 
 	var data= {
 		nodes: nodes,
@@ -51,7 +35,7 @@ function getGraphJSON(data) {
 	};
 
 	var container = document.getElementById('graphvis');
-	var network = new vis.Network(container, data, options);	
+	network = new vis.Network(container, data, options);	
 	
 	network.on('select', function (properties) {
 		//alert('selected nodes: ' + properties.nodes);
@@ -96,27 +80,27 @@ function getGraphJSON(data) {
 	NProgress.done();
 
 	$("#search-box-input").focus();
-}
 
 /*
-var nodes = new vis.DataSet();
-var edges = new vis.DataSet();
-nodes.add([
-    {id: '1', label: 'Node 1'},
-    {id: '2', label: 'Node 2'},
-    {id: '3', label: 'Node 3'},
-    {id: '4', label: 'Node 4'},
-]);
-
-edges.add([
-    {from: '1', to: '2'},
-    {from: '1', to: '3'},
-    {from: '2', to: '4'},
-    {from: '2', to: '5'},
-]);
+	setInterval(function() { 
+		var node = nodes[getRandomInt(0, 41)]["id"];
+		console.log(node);
+		network.focusOnNode(node);
+	}, 100);
 */
+}
+
 NProgress.start();
 $.getJSON("/api/graph", getGraphJSON);
+
+var notebooks = new Bloodhound({
+  //datumTokenizer: Bloodhound.tokenizers.whitespace,
+  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+  queryTokenizer: Bloodhound.tokenizers.whitespace,
+  prefetch: '/api/notebookList'
+});
+
+notebooks.initialize();
 
 $(function() {
 	$('#search-box .typeahead').typeahead({
@@ -125,7 +109,43 @@ $(function() {
 	  minLength: 1
 	},
 	{
-	  name: 'states',
-	  source: states
+	  name: 'notebooks',
+	  source: notebooks
+	});
+
+	$('.typeahead').bind('typeahead:select', function(ev, suggestion) {
+  		window.location.href = getNodeID(suggestion);
+	});
+
+	$('.typeahead').bind('typeahead:cursorchange', function(ev, suggestion) {
+		var zoom_options = {
+			scale:1.3,
+			animation: {
+				easingFunction:'easeInOutCubic'
+			},
+			duration:2000
+		};
+
+  		//var node = nodes[getRandomInt(0, 41)]["id"];
+  		var node = getNodeID(suggestion);
+
+  		//network.zoomExtent({duration:2000});
+  		//network.freezeSimulation(true);
+  		//network.focusOnNode(getNodeID(suggestion), zoom_options);
+  		network.focusOnNode(node, zoom_options);
 	});
 });
+
+function getNodeID(nodeName) {
+	for (var i = 0; i < nodes.length; i++) {
+		//console.log(nodes[i]['label']);
+		if (nodes[i]['label'] === nodeName) {
+			console.log(nodes[i]['id']);
+			return String(nodes[i]['id']);
+		}
+	}
+}
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}

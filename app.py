@@ -10,6 +10,7 @@ import re
 from bs4 import BeautifulSoup
 import json
 from purl import URL
+import webbrowser
 
 app = Flask(__name__)
 manager = Manager(app)
@@ -140,7 +141,7 @@ def graph():
 				for link in links:
 					print(link)
 					nodes_map.setdefault(link.get('url'), link.get('name'))
-					edges.append({'from':notebook.get('slug'), 'to':link.get('url'), 'style':'arrow'})
+					edges.append({'from':notebook.get('slug'), 'to':link.get('url'), 'style':'arrow', 'color':internal_link_color})
 					#nodes.append({'id':link.get('url'), 'label':link.get('name')})
 
 		for url, name in nodes_map.iteritems():
@@ -164,11 +165,13 @@ def notebook_list():
 
 	if notebooks_list:
 		for notebook in notebooks_list:
-			names.append(notebook.get('title'))			
+			#names.append(notebook.get('title'))
+			names.append({'name':notebook.get('title'), 'id':notebook.get('slug')})
 
 
 	return Response(json.dumps(names), mimetype='text/json')
 
 if __name__ == '__main__':
     #app.run(debug=True)
+    webbrowser.open("http://localhost:5000", new=2)
     manager.run()
